@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<script src="jquery-3.6.0.min.js"></script>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Document</title>
+    <style>
+    	
+    	body{
+    		background-color: gray;
+    	}
+    	#container{
+    		margin: 0px auto;
+    		width: 640px;
+    		font: 20px verdana;
+    	}
+    	#information{
+    		text-align: center;
+    		margin: 20px;
+    	}
+    	.text{
+    		color: white;
+    	}
+    	.button{
+    		background: black;
+    		color: white;
+    		margin: 10px;
+    		padding: 5px 10px;
+    		border-radius: 5px;
+    		cursor: pointer;
+    	}
+      #images div{
+        float: left;
+        width: 100px;
+        height: 100px;
+        margin: 5px;
+        padding: 5px;
+        border: 4px solid black;
+        border-radius: 10px;
+        cursor: pointer;
+        background-color: white;
+      }
+      #images div img{
+        width: 100px;
+        height: 100px;
+        display: none;
+      }
+    </style>
+	<link rel="stylesheet" href="jquery1.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    
+	<script>
+		
+    var imgSource = "";
+    var divId = "";
+    var imgFound = 0;
+    var moves = 0;
+		var imageArray = [
+                               "images/img1.jpeg",
+                               "images/img2.jpeg",
+                               "images/img3.jpeg",
+                               "images/img4.jpeg",
+                               "images/img5.jpeg",
+                               "images/img6.jpeg",
+                               "images/img7.jpeg",
+                               "images/img8.jpeg",
+                               "images/img9.jpeg",
+                               "images/img10.jpeg"
+			];
+
+    function shuffleImages() {
+      
+      var len = imageArray.length*2;
+      var imgArr =[];
+      imgArr = $.merge($.merge([],imageArray),imageArray);
+      var currentDiv = $("#images div:first-child");
+
+      imgArr = shuffle(imgArr);
+
+
+      for(var z=0; z<len; z++){
+        $("#" + currentDiv.attr("id")+" img").attr("src", imgArr[z]);
+        currentDiv = currentDiv.next();
+      }
+
+    }
+
+
+    function shuffle(array) {
+      let currentIndex = array.length,  randomIndex;
+
+      // While there remain elements to shuffle...
+      while (currentIndex != 0) {
+
+      // Pick a remaining element...
+      randomIndex = Math.floor(Math.random() * currentIndex);
+      currentIndex--;
+
+      // And swap it with the current element.
+      [array[currentIndex], array[randomIndex]] = [
+      array[randomIndex], array[currentIndex]];
+      }
+
+      return array;
+    }
+
+
+    function openCard(){
+
+      var id = $(this).attr("id");
+      if ($("#" + id  + " img").is(":hidden")){
+        $("#" + id + " img").show("slow");
+
+          if (imgSource == ""){
+            divId = id;
+            imgSource = $("#" + id + " img").attr("src");
+          }
+          else {
+            currentOpened = $("#" + id + " img").attr("src");
+            if (imgSource != currentOpened){
+                setTimeout(function(){
+                   $("#" + id + " img").hide("slow");
+                   $("#" + divId + " img").hide("slow");
+                   divId = "";
+                   imgSource = "";
+                },600);
+               
+            }
+
+          else {
+            divId = "";
+            imgSource = "";
+            imgFound++
+          }
+
+        }
+          moves++;
+          $("#moves").html(moves);
+          if (imageArray.length == imgFound) {
+            setTimeout(function(){
+              alert("YES !!! you completed the game with" + moves + "moves");
+            },1000);
+          }
+        
+      }
+    }
+
+    function ResetGame(){
+      shuffleImages();
+      moves = 0;
+      $("#moves").html(moves);
+      $("#images div img").hide();
+      imgFound = 0;
+      imgSource = "";
+      divId = "";
+    }
+
+
+		$(document).ready(function(){
+            
+    for(var i=0; i<2; i++) {
+        for (var j=0; j< imageArray.length; j++) {
+					$("#images").append("<div id=card"+ i + j + "><img src=" + imageArray[j] + " /></div>");
+				}
+			}
+
+    shuffleImages();
+    $("#images div").click(openCard);
+         
+		});
+	</script>
+</head>
+<body>
+	
+	<div id="container">
+		<div id="information">
+			<span class="text">Moves</span>
+			<span id="moves" class="text">0</span>
+			<a class="button" onclick = "ResetGame();">Reset</a>
+		</div>
+		<div id="images">
+			
+		</div>
+	</div>
+   
+</body>
+</html>
