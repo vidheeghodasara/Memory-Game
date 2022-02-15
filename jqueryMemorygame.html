@@ -160,16 +160,17 @@
 		$(document).ready(function(){
             
     for(var i=0; i<2; i++) {
-        $.each(imageArray),function(index,value){
-					$("#images").append("<div id=card"+ index + i + ":" + "><img src=" + value + " /></div>");
-        }
+        $.each(imageArray,function(index,value){
+					$("#images").append("<div id=card"+ i + index  + "><img src=" + value + " /></div>");
+        });
 				}
-			}
+			
 
     shuffleImages();
     $("#images div").click(openCard);
-         
-		});
+    
+    });     
+		
 	</script>
 </head>
 <body>
